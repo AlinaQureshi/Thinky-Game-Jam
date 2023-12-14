@@ -6,6 +6,7 @@ using UnityEngine;
 public class NotebookManager : MonoBehaviour
 {
     [SerializeField] Animator _animator;
+    [SerializeField] NotebookAudio _notebookAudioRef;
     const string OPEN_PARAMETER = "IsOpen";
 
     public static NotebookManager Instance { get; private set; }
@@ -25,6 +26,15 @@ public class NotebookManager : MonoBehaviour
     public void ToggleNotebook(bool open)
     {
         _animator.SetBool(OPEN_PARAMETER, open);
+
+        if (open)
+        {
+            _notebookAudioRef.PlaySound(_notebookAudioRef.bookOpen);
+        }
+        else
+        {
+            _notebookAudioRef.PlaySound(_notebookAudioRef.bookClose);
+        }
     }
 
 }

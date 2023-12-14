@@ -6,6 +6,7 @@ using BookCurlPro;
 
 public class NotebookFlipper : MonoBehaviour
 {
+    [SerializeField] NotebookAudio _notebookAudioRef;
     [SerializeField] BookPro _journalRef;
     [SerializeField] float _pageFlipTime = 1;
     [SerializeField] float _delayBeforeStart;
@@ -32,6 +33,8 @@ public class NotebookFlipper : MonoBehaviour
 
     public void StartFlipping(int target)
     {
+        
+
         _isBookInteractable = _journalRef.interactable;
         _journalRef.interactable = false;
         _flippingStarted = true;
@@ -55,6 +58,7 @@ public class NotebookFlipper : MonoBehaviour
                     {
                         _isPageFlipping = true;
                         PageFlipper.FlipPage(_journalRef, _pageFlipTime, _mode, () => { _isPageFlipping = false; });
+                        _notebookAudioRef.PlaySound(_notebookAudioRef.pageTurn);
                     }
                     else
                     {
