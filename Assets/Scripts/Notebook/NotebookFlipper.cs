@@ -7,7 +7,7 @@ using BookCurlPro;
 public class NotebookFlipper : MonoBehaviour
 {
     [SerializeField] NotebookAudio _notebookAudioRef;
-    [SerializeField] BookPro _journalRef;
+    [SerializeField] BookPro _notebookRef;
     [SerializeField] float _pageFlipTime = 1;
     [SerializeField] float _delayBeforeStart;
     [SerializeField] float _timeBetweenPages = 5;
@@ -25,7 +25,7 @@ public class NotebookFlipper : MonoBehaviour
     public void GotoPage(int pageNum)
     {
         if (pageNum < 0) pageNum = 0;
-        if (pageNum > _journalRef.papers.Length * 2) pageNum = _journalRef.papers.Length * 2 - 1;
+        if (pageNum > _notebookRef.papers.Length * 2) pageNum = _notebookRef.papers.Length * 2 - 1;
         this.enabled = true;
         _timeBetweenPages = 0;
         StartFlipping((pageNum + 1) / 2);
@@ -35,14 +35,14 @@ public class NotebookFlipper : MonoBehaviour
     {
         
 
-        _isBookInteractable = _journalRef.interactable;
-        _journalRef.interactable = false;
+        _isBookInteractable = _notebookRef.interactable;
+        _notebookRef.interactable = false;
         _flippingStarted = true;
         _elapsedTime = 0;
         _nextPageCountDown = 0;
         _targetPaper = target;
-        if (target > _journalRef.CurrentPaper) _mode = FlipMode.RightToLeft;
-        else if (target < _journalRef.currentPaper) _mode = FlipMode.LeftToRight;
+        if (target > _notebookRef.CurrentPaper) _mode = FlipMode.RightToLeft;
+        else if (target < _notebookRef.currentPaper) _mode = FlipMode.LeftToRight;
     }
 
     void Update()
@@ -54,16 +54,16 @@ public class NotebookFlipper : MonoBehaviour
             {
                 if (_nextPageCountDown < 0)
                 {
-                    if ((_journalRef.CurrentPaper < _targetPaper && _mode == FlipMode.RightToLeft) || (_journalRef.CurrentPaper > _targetPaper && _mode == FlipMode.LeftToRight))
+                    if ((_notebookRef.CurrentPaper < _targetPaper && _mode == FlipMode.RightToLeft) || (_notebookRef.CurrentPaper > _targetPaper && _mode == FlipMode.LeftToRight))
                     {
                         _isPageFlipping = true;
-                        PageFlipper.FlipPage(_journalRef, _pageFlipTime, _mode, () => { _isPageFlipping = false; });
+                        PageFlipper.FlipPage(_notebookRef, _pageFlipTime, _mode, () => { _isPageFlipping = false; });
                         _notebookAudioRef.PlaySound(_notebookAudioRef.pageTurn);
                     }
                     else
                     {
                         _flippingStarted = false;
-                        _journalRef.interactable = _isBookInteractable;
+                        _notebookRef.interactable = _isBookInteractable;
                         this.enabled = false;
                     }
                     _nextPageCountDown = _pageFlipTime + _timeBetweenPages + Time.deltaTime;
