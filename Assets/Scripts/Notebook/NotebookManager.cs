@@ -6,6 +6,8 @@ using UnityEngine;
 public class NotebookManager : MonoBehaviour
 {
     [SerializeField] Animator _animator;
+    [SerializeField] NotebookFlipper _notebookFlipper;
+
     [SerializeField] NotebookAudio _notebookAudioRef;
     const string OPEN_PARAMETER = "IsOpen";
 
@@ -35,6 +37,11 @@ public class NotebookManager : MonoBehaviour
         {
             _notebookAudioRef.PlaySound(_notebookAudioRef.bookClose);
         }
+    }
+
+    public void GoToPage(int page)
+    {
+        _notebookFlipper.GotoPage(page);
     }
 
 }

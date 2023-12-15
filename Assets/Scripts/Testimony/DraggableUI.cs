@@ -54,7 +54,7 @@ public class DraggableUI : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
     {
         if (_collisionUI)      
         {
-            var colliderScript = _collisionUI.GetComponent<DraggableUI>(); ;
+            var colliderScript = _collisionUI.GetComponent<DraggableUI>();
             TestimonyManager.Instance.CheckContradiction(this, colliderScript);
         }
         _collisionUI = null;
