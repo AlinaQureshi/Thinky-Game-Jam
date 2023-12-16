@@ -5,13 +5,18 @@ using UnityEngine;
 
 public class TestimonyManager : MonoBehaviour
 {
+    [Header("References")]
     [SerializeField] Canvas _sketchCanva;
     [SerializeField] Canvas _noteCanva;
-
     [SerializeField] ContradictionScreen _contradictionScreen;
 
+    [Header("Testimonies")]
     [SerializeField] Testimony[] _testimonies;
     Dictionary<TestimonyItem, Testimony> _testimonyDict = new();
+
+    Dictionary<TestimonyItem, TestimonyType> _testimonyAnswers = new();
+
+    private TestimonyItem _currentItem;
 
     public static TestimonyManager Instance { get; private set; }
 
@@ -28,11 +33,19 @@ public class TestimonyManager : MonoBehaviour
         UpdateDict();
     }
 
+    public TestimonyType GetItemAnswer(TestimonyItem item)
+    {
+        return _testimonyAnswers[item];
+    }
+
+    public int GetTestimonyCount() { return _testimonies.Length; }
+
     void UpdateDict()
     {
         foreach (var testimony in _testimonies)
         {
             _testimonyDict[testimony.Item] = testimony;
+            _testimonyAnswers[testimony.Item] = testimony.CorrectAnswer;
         }
     }
 
@@ -51,7 +64,7 @@ public class TestimonyManager : MonoBehaviour
         {
             firstUI.ItemDiscovered();
             secondUI.ItemDiscovered();
-            UpdateContradictionScreen(firstItem);
+            ShowContradictionScreen(firstItem);
         }
         else
         {
@@ -59,14 +72,21 @@ public class TestimonyManager : MonoBehaviour
         }
     }
 
-    public void UpdateContradictionScreen(TestimonyItem item)
+    public void ShowContradictionScreen(TestimonyItem item, bool isNew = true)
     {
+        _currentItem = item;
         var info = _testimonyDict[item];
         _contradictionScreen.UpdateScreenInfo(info.SketchInfo.Description, info.NoteInfo.Description);
+        if (isNew) NotebookManager.Instance.ToggleNotebook(true);
+        NotebookManager.Instance.GoToPage(6);
     }
+
+  
 
     public void ChooseOption(int index)
     {
         _contradictionScreen.ToggleScreen(false);
+        var info = _testimonyDict[_currentItem];
+        DeductionManager.Instance.AddDeduction(_currentItem, (index == 0 ? info.SketchInfo : info.NoteInfo));
     }
 }

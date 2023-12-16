@@ -5,6 +5,7 @@ public class Testimony
 {
     public string Key;
     public TestimonyItem Item;
+    public TestimonyType CorrectAnswer;
     public TestimonyInfo SketchInfo;
     public TestimonyInfo NoteInfo;
 }
@@ -26,5 +27,6 @@ public enum TestimonyType
 public enum TestimonyItem
 {
     GreenSquare,
+    TwoSquares,
 
 }
