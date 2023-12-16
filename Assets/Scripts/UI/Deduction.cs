@@ -24,6 +24,9 @@ public class Deduction : MonoBehaviour
     public void UpdateTestimony()
     {
         TestimonyManager.Instance.ShowContradictionScreen(_testimonyItem, false);
+        FMOD.Studio.EventInstance audioEvent = FMODUnity.RuntimeManager.CreateInstance("event:/Writing");
+        audioEvent.start();
+        audioEvent.release();
     }
 
     public TestimonyType GetTestimonyType()
@@ -37,6 +40,11 @@ public class Deduction : MonoBehaviour
         foreach (char c in line.ToCharArray())
         {
             _deductionText.text += c;
+
+            FMOD.Studio.EventInstance audioEvent = FMODUnity.RuntimeManager.CreateInstance("event:/Typewriter");
+            audioEvent.start();
+            audioEvent.release();
+
             yield return new WaitForSeconds(_writeSpeed);
         }
     }

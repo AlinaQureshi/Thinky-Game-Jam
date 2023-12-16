@@ -65,10 +65,18 @@ public class TestimonyManager : MonoBehaviour
             firstUI.ItemDiscovered();
             secondUI.ItemDiscovered();
             ShowContradictionScreen(firstItem);
+
+            FMOD.Studio.EventInstance audioEvent = FMODUnity.RuntimeManager.CreateInstance("event:/Correct");
+            audioEvent.start();
+            audioEvent.release();
         }
         else
         {
             //Can add incorrect sfx here
+
+            FMOD.Studio.EventInstance audioEvent = FMODUnity.RuntimeManager.CreateInstance("event:/Incorrect");
+            audioEvent.start();
+            audioEvent.release();
         }
     }
 
