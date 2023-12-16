@@ -41,7 +41,7 @@ public class Deduction : MonoBehaviour
         {
             _deductionText.text += c;
 
-            FMOD.Studio.EventInstance audioEvent = FMODUnity.RuntimeManager.CreateInstance("event:/Typewriter");
+            FMOD.Studio.EventInstance audioEvent = FMODUnity.RuntimeManager.CreateInstance("event:/Handwriting");
             audioEvent.start();
             audioEvent.release();
 
