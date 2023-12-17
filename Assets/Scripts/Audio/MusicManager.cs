@@ -8,10 +8,13 @@ public class MusicManager : MonoBehaviour
     const string sfxBusPathl = "bus:/SFX";
     const string musicBusPath = "bus:/Music";
 
+    const string musicMenuPath = "event:/Frame_of_Mind_Menu";
+    const string musicGamePath = "event:/Frame_of_Mind";
+
     // Start is called before the first frame update
     void Start()
     {
-        FMOD.Studio.EventInstance audioEvent = FMODUnity.RuntimeManager.CreateInstance("event:/The_Metal_Rose");
+        FMOD.Studio.EventInstance audioEvent = FMODUnity.RuntimeManager.CreateInstance(musicGamePath);
         audioEvent.start();
         audioEvent.release();
     }
