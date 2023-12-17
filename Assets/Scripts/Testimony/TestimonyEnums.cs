@@ -6,6 +6,7 @@ public class Testimony
     public string Key;
     public TestimonyItem Item;
     public TestimonyType CorrectAnswer;
+    public string TimelineEvent;
     public TestimonyInfo SketchInfo;
     public TestimonyInfo NoteInfo;
 }
@@ -15,7 +16,6 @@ public class TestimonyInfo
 {
     public TestimonyType Type;
     public string Description;
-    public string Event;
 }
 
 public enum TestimonyType
@@ -26,7 +26,10 @@ public enum TestimonyType
 
 public enum TestimonyItem
 {
-    GreenSquare,
-    TwoSquares,
-
+    Plants,
+    DeskPapers,
+    Window,
+    Cat,
+    Candlestick,
+    Quill
 }

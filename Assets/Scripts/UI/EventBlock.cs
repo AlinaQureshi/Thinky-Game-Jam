@@ -1,20 +1,12 @@
-using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class DraggableUI : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
+public class EventBlock : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
 {
-    [SerializeField] TestimonyItem _testimonyItem;
-    [SerializeField] TestimonyType _testimonyType;
-    [SerializeField] float _scaleMultiplier = 1.2f;
     [SerializeField] float _resetTime;
-
-    [SerializeField] GameObject _highlightObject;
-
-    Transform _canvaParent;
-    Transform _testimonyParent;
-
-    private GameObject _collisionUI;
+    [SerializeField] int _eventOrder;
 
     private bool _isDiscovered;
     private bool _isDragging;
@@ -28,40 +20,29 @@ public class DraggableUI : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
     {
         _originalPosition = this.transform.position;
         _localPosition = this.transform.localPosition;
-        _canvaParent = TestimonyManager.Instance.GetCanvaTransform();
-        _testimonyParent = TestimonyManager.Instance.GetTestimonyTransform();
     }
 
-    public TestimonyItem GetTestimonyItem() { return _testimonyItem; }
-    public void ItemDiscovered() {
+    public void ItemDiscovered()
+    {
         _isDiscovered = true;
-        if (_highlightObject) _highlightObject.SetActive(false);
     }
 
 
     public void OnBeginDrag(PointerEventData eventData)
     {
         if (_isDiscovered) return;
+        Debug.Log("OnBeginDrag");
 
         _isDragging = true;
         _isAtPlace = false;
-        if (_testimonyType == TestimonyType.Writing)
-        {
-            transform.SetParent(_canvaParent);
-            transform.position = _originalPosition;
-        }   
-        else
-        {
-            transform.localScale = Vector3.one * _scaleMultiplier;
-        }
-        TestimonyManager.Instance.UpdateCanvaOrder(_testimonyType);
     }
 
     public void OnDrag(PointerEventData eventData)
     {
+        Debug.Log("OnDrag");
         if (_isDiscovered) return;
         var currentPos = GetMousePos();
-        transform.position = new Vector3 (currentPos.x, currentPos.y, 0);
+        transform.position = new Vector3(currentPos.x, currentPos.y, 0);
     }
 
     Vector3 GetMousePos()
@@ -72,26 +53,11 @@ public class DraggableUI : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
     public void OnEndDrag(PointerEventData eventData)
     {
         if (_isDiscovered) return;
-
+        ResetBackToLocalPosition();
         _isDragging = false;
-        if (_testimonyType == TestimonyType.Writing) { transform.SetParent(_testimonyParent); }
-        else { transform.localScale = Vector3.one; }
-        CheckCollision();
+        //CheckCollision();
     }
 
-    void CheckCollision()
-    {
-        if (_collisionUI)      
-        {
-            var colliderScript = _collisionUI.GetComponent<DraggableUI>();
-            TestimonyManager.Instance.CheckContradiction(this, colliderScript);
-        }
-        _collisionUI = null;
-
-        if (_testimonyType == TestimonyType.Sketch) { ResetBackToPosition(); }
-        else { ResetBackToLocalPosition(); }
-    }
- 
     void ResetBackToPosition()
     {
         Vector3 startingPos = transform.position;
@@ -130,11 +96,11 @@ public class DraggableUI : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (_isDiscovered || this.CompareTag(collision.tag)) return;
-        if (_isDragging && !_isAtPlace) { _collisionUI = collision.gameObject; }
+        //if (_isDragging && !_isAtPlace) { _collisionUI = collision.gameObject; }
     }
 
     private void OnTriggerExit2D(Collider2D collision)
     {
-        if (_collisionUI == collision.gameObject) { _collisionUI = null; }
+       // if (_collisionUI == collision.gameObject) { _collisionUI = null; }
     }
 }

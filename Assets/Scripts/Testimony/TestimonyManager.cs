@@ -10,6 +10,9 @@ public class TestimonyManager : MonoBehaviour
     [SerializeField] Canvas _noteCanva;
     [SerializeField] ContradictionScreen _contradictionScreen;
 
+    [SerializeField] Transform _canvaParent;
+    [SerializeField] Transform _testimonyParent;
+
     [Header("Testimonies")]
     [SerializeField] Testimony[] _testimonies;
     Dictionary<TestimonyItem, Testimony> _testimonyDict = new();
@@ -89,12 +92,14 @@ public class TestimonyManager : MonoBehaviour
         NotebookManager.Instance.GoToPage(6);
     }
 
-  
-
     public void ChooseOption(int index)
     {
         _contradictionScreen.ToggleScreen(false);
         var info = _testimonyDict[_currentItem];
         DeductionManager.Instance.AddDeduction(_currentItem, (index == 0 ? info.SketchInfo : info.NoteInfo));
     }
+
+    public Transform GetTestimonyTransform() { return _testimonyParent;}
+
+    public Transform GetCanvaTransform() { return _canvaParent; }
 }
