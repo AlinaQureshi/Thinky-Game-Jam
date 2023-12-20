@@ -3,12 +3,16 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
 public class EventBlock : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
 {
     [SerializeField] float _resetTime;
     [SerializeField] int _eventOrder;
     [SerializeField] TMP_Text _eventText;
+
+    [SerializeField] GraphicRaycaster _graphicRaycaster;
+
 
     private GameObject _collisionUI;
 
@@ -25,6 +29,11 @@ public class EventBlock : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDr
     {
         _originalPosition = this.transform.position;
         _localPosition = this.transform.localPosition;
+    }
+
+    public void ToggleRayCast(bool enable)
+    {
+        _graphicRaycaster.enabled = enable;
     }
 
     public void ItemDiscovered()
@@ -127,4 +136,5 @@ public class EventBlock : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDr
             _collisionUI = null;
         }
     }
+
 }

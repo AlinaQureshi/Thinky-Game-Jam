@@ -1,7 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 public class DeductionManager : MonoBehaviour
 {
@@ -14,7 +16,9 @@ public class DeductionManager : MonoBehaviour
     [SerializeField] Button _timelineButton;
     [SerializeField] Image _timelineImage;
 
-    [SerializeField]
+    [SerializeField] TMP_Text _incorrectText;
+    [SerializeField] TMP_Text _incorrectText2;
+    [SerializeField] string _inccorectString;
 
     private int _deductionCount = 0;
     private int _numberOfDeductions;
@@ -42,6 +46,7 @@ public class DeductionManager : MonoBehaviour
         var newColor = _timelineImage.color;
         newColor.a = 0;
         _timelineImage.color = newColor;
+        _incorrectText.text = _incorrectText2.text = "";
     }
 
     public void AddDeduction(TestimonyItem item, TestimonyInfo info)
@@ -65,22 +70,44 @@ public class DeductionManager : MonoBehaviour
 
     private bool CheckDeductions()
     {
+        var incorrectCount = 0; 
         foreach (var item in _currentDeductions.Keys)
         {
             var answer = TestimonyManager.Instance.GetItemAnswer(item);
-            if (_currentDeductions[item].GetTestimonyType() != answer) return false;
+            if (_currentDeductions[item].GetTestimonyType() != answer)
+                incorrectCount++;
         }
-        return true;
+
+        if (incorrectCount == 0)
+        {
+            _incorrectText.text = _incorrectText2.text = "";
+            return true;
+        }
+        else
+        {
+            _incorrectText.text = _incorrectText2.text = incorrectCount + _inccorectString;
+            return false;
+        }
     }
 
     IEnumerator DelayTimelineUnlock()
     {
+        LockDeductions();
         yield return new WaitForSeconds(_timelineUnlockDelay);
         _timelineButton.interactable = true;
         var newColor = _timelineImage.color;
         newColor.a = 1;
         _timelineImage.color = newColor;
+        TimelineManager.Instance.EnableTimeline();
         NotebookManager.Instance.GoToPage(9);
+    }
+
+    void LockDeductions()
+    {
+        foreach (var item in _currentDeductions.Keys)
+        {
+            _currentDeductions[item].LockDeduction();
+        }
     }
 
     

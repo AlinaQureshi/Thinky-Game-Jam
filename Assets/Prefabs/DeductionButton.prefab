@@ -148,6 +148,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _deductionText: {fileID: 6259321423984755679}
+  _deductionButton: {fileID: 6259321423645556995}
   _writeSpeed: 0.06
 --- !u!1 &6259321423984755677
 GameObject:

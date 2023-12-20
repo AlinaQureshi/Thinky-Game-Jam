@@ -10,6 +10,8 @@ public class DraggableUI : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
     [SerializeField] float _scaleMultiplier = 1.2f;
     [SerializeField] float _resetTime;
 
+    [SerializeField] Vector3 _offset = Vector3.zero;
+
     [SerializeField] Image _image;
     [SerializeField] GameObject _highlightObject;
 
@@ -64,7 +66,7 @@ public class DraggableUI : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
     public void OnDrag(PointerEventData eventData)
     {
         if (_isDiscovered) return;
-        var currentPos = GetMousePos();
+        var currentPos = GetMousePos() + _offset; 
         transform.position = new Vector3 (currentPos.x, currentPos.y, 0);
     }
 
@@ -140,5 +142,6 @@ public class DraggableUI : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
     private void OnTriggerExit2D(Collider2D collision)
     {
         if (_collisionUI == collision.gameObject) { _collisionUI = null; }
+
     }
 }

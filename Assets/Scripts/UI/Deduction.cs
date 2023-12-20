@@ -1,10 +1,12 @@
 using System.Collections;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Deduction : MonoBehaviour
 {
     [SerializeField] TMP_Text _deductionText;
+    [SerializeField] Button _deductionButton;
     [SerializeField] float _writeSpeed = 0.2f;
     private TestimonyItem _testimonyItem;
     private TestimonyInfo _testimonyInfo;
@@ -16,11 +18,21 @@ public class Deduction : MonoBehaviour
         SetTestimony();
     }
 
-    Coroutine _typing;
+    Coroutine _typingCoroutine;
 
     public void SetTestimony()
     {
-        _typing = StartCoroutine(WriteLine(_testimonyInfo.Description));
+        if (_typingCoroutine != null) { StopCoroutine(_typingCoroutine); }
+        _typingCoroutine = StartCoroutine(WriteLine(_testimonyInfo.Description));
+    }
+
+    private void OnDisable()
+    {
+        if (_typingCoroutine != null)
+        {
+            _deductionText.text = _testimonyInfo.Description;
+            StopCoroutine(_typingCoroutine);
+        }
     }
 
     public void UpdateTestimony()
@@ -34,6 +46,11 @@ public class Deduction : MonoBehaviour
     public TestimonyType GetTestimonyType()
     {
         return _testimonyInfo.Type;
+    }
+
+    public void LockDeduction()
+    {
+        _deductionButton.interactable = false;
     }
 
     IEnumerator WriteLine(string line)
@@ -50,6 +67,6 @@ public class Deduction : MonoBehaviour
             yield return new WaitForSeconds(_writeSpeed);
         }
 
-        _typing = null;
+        _typingCoroutine = null;
     }
 }
