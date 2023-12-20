@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -7,6 +8,10 @@ public class EventBlock : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDr
 {
     [SerializeField] float _resetTime;
     [SerializeField] int _eventOrder;
+    [SerializeField] TMP_Text _eventText;
+
+    private GameObject _collisionUI;
+
 
     private bool _isDiscovered;
     private bool _isDragging;
@@ -27,22 +32,31 @@ public class EventBlock : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDr
         _isDiscovered = true;
     }
 
+    public int GetOrder()
+    {
+        return _eventOrder;
+    }
+
+
+    public void UpdateEvent(string eventText, int eventOrder)
+    {
+        _eventText.text = eventText;
+        _eventOrder = eventOrder;
+    }
+
 
     public void OnBeginDrag(PointerEventData eventData)
     {
         if (_isDiscovered) return;
-        Debug.Log("OnBeginDrag");
-
         _isDragging = true;
         _isAtPlace = false;
     }
 
     public void OnDrag(PointerEventData eventData)
     {
-        Debug.Log("OnDrag");
         if (_isDiscovered) return;
         var currentPos = GetMousePos();
-        transform.position = new Vector3(currentPos.x, currentPos.y, 0);
+        transform.position =  new Vector3(currentPos.x, currentPos.y, _originalPosition.z);
     }
 
     Vector3 GetMousePos()
@@ -53,30 +67,28 @@ public class EventBlock : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDr
     public void OnEndDrag(PointerEventData eventData)
     {
         if (_isDiscovered) return;
-        ResetBackToLocalPosition();
         _isDragging = false;
-        //CheckCollision();
+        CheckCollision();
     }
 
-    void ResetBackToPosition()
+
+    void CheckCollision()
     {
-        Vector3 startingPos = transform.position;
-        float elapsedTime = 0;
-        StartCoroutine(SmoothMovement());
-        IEnumerator SmoothMovement()
+        if (_collisionUI)
         {
-            while (elapsedTime < _resetTime)
-            {
-                transform.position = Vector3.Lerp(startingPos, _originalPosition, (elapsedTime / _resetTime));
-                elapsedTime += Time.deltaTime;
-                yield return null;
-            }
-            transform.position = _originalPosition;
-            _isAtPlace = true;
+            var colliderScript = _collisionUI.GetComponent<EventMatch>();
+            TimelineManager.Instance.ConnectEvents(this, colliderScript);
         }
+        else
+        {
+            ResetBackToLocalPosition();
+        }
+        _collisionUI = null;
     }
-    void ResetBackToLocalPosition()
+
+    public void ResetBackToLocalPosition()
     {
+        TimelineManager.Instance.ResetDictKey(this);
         Vector3 startingPos = transform.localPosition;
         float elapsedTime = 0;
         StartCoroutine(SmoothMovement());
@@ -93,14 +105,26 @@ public class EventBlock : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDr
         }
     }
 
+    public void SnapToPosition(Vector3 pos)
+    {
+        transform.position = pos;
+    }
+
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (_isDiscovered || this.CompareTag(collision.tag)) return;
-        //if (_isDragging && !_isAtPlace) { _collisionUI = collision.gameObject; }
+        if (_isDragging && !_isAtPlace) {
+            if (collision.tag == "EventMatch")
+            {
+                _collisionUI = collision.gameObject;
+            }
+        }
     }
 
     private void OnTriggerExit2D(Collider2D collision)
     {
-       // if (_collisionUI == collision.gameObject) { _collisionUI = null; }
+       if (_collisionUI == collision.gameObject) { 
+            _collisionUI = null;
+        }
     }
 }

@@ -88,7 +88,11 @@ public class TestimonyManager : MonoBehaviour
         _currentItem = item;
         var info = _testimonyDict[item];
         _contradictionScreen.UpdateScreenInfo(info.SketchInfo.Description, info.NoteInfo.Description);
-        if (isNew) NotebookManager.Instance.ToggleNotebook(true);
+        if (isNew)
+        {
+            NotebookManager.Instance.ToggleNotebook(true);
+            TimelineManager.Instance.UpdateEvent(info.TimelineEvent, info.TimelineOrder);
+        }
         NotebookManager.Instance.GoToPage(6);
     }
 

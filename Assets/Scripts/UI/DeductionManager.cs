@@ -12,6 +12,9 @@ public class DeductionManager : MonoBehaviour
 
     [SerializeField] float _timelineUnlockDelay = 3f;
     [SerializeField] Button _timelineButton;
+    [SerializeField] Image _timelineImage;
+
+    [SerializeField]
 
     private int _deductionCount = 0;
     private int _numberOfDeductions;
@@ -36,6 +39,9 @@ public class DeductionManager : MonoBehaviour
     {
         _numberOfDeductions = TestimonyManager.Instance.GetTestimonyCount();
         _deductionPerPage = _numberOfDeductions / 2;
+        var newColor = _timelineImage.color;
+        newColor.a = 0;
+        _timelineImage.color = newColor;
     }
 
     public void AddDeduction(TestimonyItem item, TestimonyInfo info)
@@ -71,6 +77,9 @@ public class DeductionManager : MonoBehaviour
     {
         yield return new WaitForSeconds(_timelineUnlockDelay);
         _timelineButton.interactable = true;
+        var newColor = _timelineImage.color;
+        newColor.a = 1;
+        _timelineImage.color = newColor;
         NotebookManager.Instance.GoToPage(9);
     }
 

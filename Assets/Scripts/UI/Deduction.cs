@@ -16,9 +16,11 @@ public class Deduction : MonoBehaviour
         SetTestimony();
     }
 
+    Coroutine _typing;
+
     public void SetTestimony()
     {
-        StartCoroutine(WriteLine(_testimonyInfo.Description));
+        _typing = StartCoroutine(WriteLine(_testimonyInfo.Description));
     }
 
     public void UpdateTestimony()
@@ -47,5 +49,7 @@ public class Deduction : MonoBehaviour
 
             yield return new WaitForSeconds(_writeSpeed);
         }
+
+        _typing = null;
     }
 }

@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Collections;
 using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
 public class DraggableUI : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
 {
@@ -9,6 +10,7 @@ public class DraggableUI : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
     [SerializeField] float _scaleMultiplier = 1.2f;
     [SerializeField] float _resetTime;
 
+    [SerializeField] Image _image;
     [SerializeField] GameObject _highlightObject;
 
     Transform _canvaParent;
@@ -22,6 +24,7 @@ public class DraggableUI : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
 
     private Vector3 _originalPosition;
     private Vector3 _localPosition;
+    private Vector3 _currentScale;
 
 
     private void Start()
@@ -36,6 +39,7 @@ public class DraggableUI : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
     public void ItemDiscovered() {
         _isDiscovered = true;
         if (_highlightObject) _highlightObject.SetActive(false);
+        if (_image) _image.raycastTarget = false;
     }
 
 

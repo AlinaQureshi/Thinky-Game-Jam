@@ -6,6 +6,8 @@ TagManager:
   tags:
   - Keyword
   - Keysprite
+  - EventBlock
+  - EventMatch
   layers:
   - Default
   - TransparentFX

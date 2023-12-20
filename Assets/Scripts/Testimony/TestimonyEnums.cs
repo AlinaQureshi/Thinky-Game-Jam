@@ -7,6 +7,7 @@ public class Testimony
     public TestimonyItem Item;
     public TestimonyType CorrectAnswer;
     public string TimelineEvent;
+    public int TimelineOrder;
     public TestimonyInfo SketchInfo;
     public TestimonyInfo NoteInfo;
 }

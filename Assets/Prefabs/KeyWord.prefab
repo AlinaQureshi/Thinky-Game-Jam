@@ -155,6 +155,7 @@ MonoBehaviour:
   _testimonyType: 1
   _scaleMultiplier: 1.2
   _resetTime: 0.25
+  _image: {fileID: 0}
   _highlightObject: {fileID: 3940408559907749364}
 --- !u!61 &1030384322329997167
 BoxCollider2D:
@@ -263,7 +264,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 0.98020595, b: 0, a: 0.32941177}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
